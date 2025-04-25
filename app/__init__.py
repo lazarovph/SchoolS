@@ -7,12 +7,12 @@ migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object('instance.config')  # Задаване на конфигурацията
+    app.config.from_object('instance.config')  
     
     db.init_app(app)
-    migrate.init_app(app, db)  # Инициализиране на Flask-Migrate
+    migrate.init_app(app, db)  
 
-    from . import routes  # Импортиране на маршрути
+    from . import routes  
     app.register_blueprint(routes.bp)
 
     return app

@@ -1,20 +1,18 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-from app.config import Config
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
-login_manager = LoginManager()
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object('instance.config')  # Задаване на конфигурацията
     
     db.init_app(app)
-    login_manager.init_app(app)
-    
-    from app.routes import main_routes, auth_routes
-    app.register_blueprint(main_routes)
-    app.register_blueprint(auth_routes)
-    
+    migrate.init_app(app, db)  # Инициализиране на Flask-Migrate
+
+    from . import routes  # Импортиране на маршрути
+    app.register_blueprint(routes.bp)
+
     return app
